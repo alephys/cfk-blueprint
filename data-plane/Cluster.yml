@@ -1,0 +1,47 @@
+apiVersion: cluster.cpc.platform.confluent.io/v1beta1
+kind: ZookeeperCluster
+metadata:
+  name: zookeeper
+spec:
+  k8sClusterRef:
+    name: data-plane-k8s # <- this is the name defined in the KubernetesCluster.yml
+    namespace: control-plane
+  blueprintRef:
+    name: standard
+    namespace: control-plane
+---
+apiVersion: cluster.cpc.platform.confluent.io/v1beta1
+kind: KafkaCluster
+metadata:
+  name: kafka
+spec:
+  k8sClusterRef:
+    name: data-plane-k8s
+    namespace: control-plane
+  blueprintRef:
+    name: standard
+    namespace: control-plane
+---
+apiVersion: cluster.cpc.platform.confluent.io/v1beta1
+kind: SchemaRegistryCluster
+metadata:
+  name: schemaregistry
+spec:
+  k8sClusterRef:
+    name: data-plane-k8s
+    namespace: control-plane
+  blueprintRef:
+    name: standard
+    namespace: control-plane
+---
+apiVersion: cluster.cpc.platform.confluent.io/v1beta1
+kind: ControlCenterCluster
+metadata:
+  name: controlcenter
+spec:
+  k8sClusterRef:
+    name: data-plane-k8s
+    namespace: control-plane
+  blueprintRef:
+    name: standard
+    namespace: control-plane

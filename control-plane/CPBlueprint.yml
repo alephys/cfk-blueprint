@@ -1,0 +1,128 @@
+---
+apiVersion: core.cpc.platform.confluent.io/v1beta1
+kind: ZookeeperClusterClass
+metadata:
+  name: zookeeper-standard
+  namespace: control-plane
+spec:
+   provisioner:
+    type: cfk
+    cfk:
+      replicas: 1
+      # +optional
+      image:
+        application:
+          registry: docker.io
+          repository: confluentinc/cp-zookeeper
+          tag: 7.4.0
+        init:
+          registry: docker.io
+          repository: confluentinc/confluent-init-container
+          tag: 2.6.0
+      volume:
+        data:
+          capacity: 1Gi
+        log:
+          capacity: 1Gi
+---
+apiVersion: core.cpc.platform.confluent.io/v1beta1
+kind: KafkaClusterClass
+metadata:
+  name: kafka-standard
+  namespace: control-plane
+spec:
+  provisioner:
+    type: cfk
+    cfk:
+      replicas: 1
+      # +optional
+      image:
+        application:
+          registry: docker.io
+          repository: confluentinc/cp-server
+          tag: 7.4.0
+        init:
+          registry: docker.io
+          repository: confluentinc/confluent-init-container
+          tag: 2.6.0
+      volume:
+        data:
+          capacity: 1Gi
+      configOverrides:
+        server:
+        - auto.create.topics.enable=true
+---
+apiVersion: core.cpc.platform.confluent.io/v1beta1
+kind: ControlCenterClusterClass
+metadata:
+  name: controlcenter-standard
+  namespace: control-plane
+spec:
+  provisioner:
+    type: cfk
+    cfk:
+      id: 1
+      replicas: 1
+      # +optional
+      image:
+        application:
+          registry: docker.io
+          repository: confluentinc/cp-enterprise-control-center
+          tag: 7.4.0
+        init:
+          registry: docker.io
+          repository: confluentinc/confluent-init-container
+          tag: 2.6.0
+      internalTopicReplicationFactor: 1
+      volume:
+        data:
+          capacity: 1Gi
+---
+apiVersion: core.cpc.platform.confluent.io/v1beta1
+kind: SchemaRegistryClusterClass
+metadata:
+  name: schemaregistry-standard
+  namespace: control-plane
+spec:
+   provisioner:
+    type: cfk
+    cfk:
+      replicas: 1
+      # +optional
+      image:
+        application:
+          registry: docker.io
+          repository: confluentinc/cp-schema-registry
+          tag: 7.4.0
+        init:
+          registry: docker.io
+          repository: confluentinc/confluent-init-container
+          tag: 2.6.0
+      internalTopicReplicationFactor: 1
+---
+apiVersion: core.cpc.platform.confluent.io/v1beta1
+kind: ConfluentPlatformBlueprint
+metadata:
+  name: standard
+  namespace: control-plane
+spec:
+  dockerImages:
+  - registry: docker.io
+  confluentPlatform:
+    version: 7.4.0
+  components:
+    zookeeperCluster:
+      classRef:
+        name: zookeeper-standard
+        namespace: control-plane
+    kafkaCluster:
+      classRef:
+        name: kafka-standard
+        namespace: control-plane
+    controlCenterCluster:
+      classRef:
+        name: controlcenter-standard
+        namespace: control-plane
+    schemaRegistryCluster:
+      classRef:
+        name: schemaregistry-standard

@@ -1,0 +1,9 @@
+apiVersion: core.cpc.platform.confluent.io/v1beta1
+kind: CPCHealthCheck
+metadata:
+  name: data-plane-hc
+  namespace: control-plane
+spec:
+  k8sClusterRef:
+    name: data-plane-k8s # <- this is the name defined in the KubernetesCluster.yml
+    namespace: control-plane

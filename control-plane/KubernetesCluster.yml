@@ -1,0 +1,8 @@
+apiVersion: core.cpc.platform.confluent.io/v1beta1
+kind: KubernetesCluster
+metadata:
+  name: data-plane-k8s # <- on this we refer in the HealthCheck and
+  namespace: control-plane
+spec:
+  k8sID:  "" # <- id from kubectl get namespace kube-system -oyaml | grep uid
+  k8sClusterDomain: cluster.local
