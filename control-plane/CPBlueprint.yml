@@ -48,9 +48,9 @@ spec:
       volume:
         data:
           capacity: 1Gi
-      configOverrides:
-        server:
-        - auto.create.topics.enable=true
+#      configOverrides:
+#        server:
+#        - auto.create.topics.enable=true
 ---
 apiVersion: core.cpc.platform.confluent.io/v1beta1
 kind: ControlCenterClusterClass
